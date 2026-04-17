@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Database</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 20px; }
+        h1 { color: #003d7a; }
+        nav { margin-bottom: 24px; }
+        nav a { margin-right: 16px; color: #0057a8; text-decoration: none; font-weight: bold; }
+        nav a:hover { text-decoration: underline; }
+        .search-panels { display: flex; gap: 30px; margin-top: 10px; }
+        .panel { flex: 1; border: 1px solid #ccc; padding: 24px; border-radius: 6px; background: #f9f9f9; }
+        .panel h2 { margin-top: 0; color: #003d7a; }
+        input[type="text"] { width: 100%; padding: 8px; box-sizing: border-box; margin-top: 6px; border: 1px solid #aaa; border-radius: 4px; }
+        button { margin-top: 14px; padding: 9px 22px; background: #0057a8; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        button:hover { background: #003d7a; }
+    </style>
+</head>
+<body>
+    <h1>University Student Database</h1>
+    <nav>
+        <a href="{{ url_for('index') }}">Search</a>
+        <a href="{{ url_for('add_student') }}">Add Student</a>
+    </nav>
+
+    <div class="search-panels">
+        <div class="panel">
+            <h2>Search by Name</h2>
+            <form method="POST" action="{{ url_for('search') }}">
+                <input type="hidden" name="search_type" value="name">
+                <label for="name_query">Enter partial name:</label>
+                <input type="text" id="name_query" name="query" placeholder="e.g. Jon" required>
+                <br>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <div class="panel">
+            <h2>Search by ID</h2>
+            <form method="POST" action="{{ url_for('search') }}">
+                <input type="hidden" name="search_type" value="id">
+                <label for="id_query">Enter partial ID:</label>
+                <input type="text" id="id_query" name="query" placeholder="e.g. 1234" required>
+                <br>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

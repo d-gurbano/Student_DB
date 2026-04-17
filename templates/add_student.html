@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Student</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 520px; margin: 40px auto; padding: 0 20px; }
+        h1 { color: #003d7a; }
+        nav { margin-bottom: 20px; }
+        nav a { margin-right: 16px; color: #0057a8; text-decoration: none; font-weight: bold; }
+        nav a:hover { text-decoration: underline; }
+        label { display: block; margin-top: 16px; font-weight: bold; }
+        input[type="text"], input[type="number"], select {
+            width: 100%; padding: 8px; box-sizing: border-box;
+            margin-top: 5px; border: 1px solid #aaa; border-radius: 4px;
+        }
+        .checkbox-row { display: flex; align-items: center; gap: 10px; margin-top: 18px; }
+        .checkbox-row input { width: auto; margin: 0; }
+        .checkbox-row label { margin: 0; font-weight: bold; }
+        #transfer-credits { margin-top: 14px; }
+        button { margin-top: 22px; padding: 10px 26px; background: #0057a8; color: white;
+                 border: none; border-radius: 4px; cursor: pointer; font-size: 15px; }
+        button:hover { background: #003d7a; }
+        .error { color: #c0392b; background: #fdecea; border: 1px solid #e74c3c;
+                 padding: 10px 14px; border-radius: 4px; margin-top: 14px; }
+        .success-note { color: #27ae60; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Add New Student</h1>
+    <nav>
+        <a href="{{ url_for('index') }}">&#8592; Back to Search</a>
+    </nav>
+
+    {% if error %}
+    <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('add_student_submit') }}">
+        <label for="id">Student ID</label>
+        <input type="text" id="id" name="id" required placeholder="e.g. 99001">
+
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" required placeholder="e.g. Jane Doe">
+
+        <label for="dept_name">Department</label>
+        <select id="dept_name" name="dept_name" required>
+            <option value="">-- Select Department --</option>
+            {% for dept in departments %}
+            <option value="{{ dept.dept_name }}">{{ dept.dept_name }}</option>
+            {% endfor %}
+        </select>
+
+        <div class="checkbox-row">
+            <input type="checkbox" id="is_transfer" name="is_transfer"
+                   onchange="toggleCredits(this)">
+            <label for="is_transfer">Transfer Student</label>
+        </div>
+
+        <div id="transfer-credits" style="display:none;">
+            <label for="tot_cred">Total Credits Transferred</label>
+            <input type="number" id="tot_cred" name="tot_cred"
+                   min="0" max="999" value="0" placeholder="e.g. 30">
+        </div>
+
+        <button type="submit">Add Student</button>
+    </form>
+
+    <script>
+        function toggleCredits(checkbox) {
+            document.getElementById("transfer-credits").style.display =
+                checkbox.checked ? "block" : "none";
+        }
+    </script>
+</body>
+</html>
