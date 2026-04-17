@@ -4,33 +4,46 @@
     <meta charset="UTF-8">
     <title>Search Results</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 960px; margin: 40px auto; padding: 0 20px; }
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
         h1 { color: #003d7a; }
-        nav { margin-bottom: 20px; }
-        nav a { margin-right: 16px; color: #0057a8; text-decoration: none; font-weight: bold; }
+        nav a {
+            margin-right: 15px;
+            color: #0057a8;
+            text-decoration: none;
+        }
         nav a:hover { text-decoration: underline; }
-        p.summary { color: #444; }
-        table { border-collapse: collapse; width: 100%; margin-top: 16px; }
-        th { background: #0057a8; color: white; padding: 10px 14px; text-align: left; }
-        td { border: 1px solid #ccc; padding: 10px 14px; }
-        tr:nth-child(even) td { background: #f2f2f2; }
-        a.schedule-link { color: #0057a8; text-decoration: none; font-weight: bold; }
-        a.schedule-link:hover { text-decoration: underline; }
-        .no-results { color: #888; font-style: italic; }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th {
+            background-color: #0057a8;
+            color: white;
+            padding: 10px 12px;
+            text-align: left;
+        }
+        td {
+            border: 1px solid #ccc;
+            padding: 9px 12px;
+        }
+        tr:nth-child(even) td { background: #f4f4f4; }
+        a.sched { color: #0057a8; }
     </style>
 </head>
 <body>
     <h1>Search Results</h1>
     <nav>
-        <a href="{{ url_for('index') }}">&#8592; Back to Search</a>
+        <a href="{{ url_for('index') }}">&larr; Back</a>
         <a href="{{ url_for('add_student') }}">Add Student</a>
     </nav>
 
-    <p class="summary">
-        Searched by <strong>{{ search_type }}</strong> for
-        <strong>"{{ query }}"</strong> &mdash;
-        <strong>{{ students|length }}</strong> result(s) found.
-    </p>
+    <p>Results for "{{ query }}" (searched by {{ search_type }}): {{ students|length }} found</p>
 
     {% if students %}
     <table>
@@ -50,18 +63,13 @@
                 <td>{{ s.name }}</td>
                 <td>{{ s.dept_name }}</td>
                 <td>{{ s.tot_cred }}</td>
-                <td>
-                    <a class="schedule-link"
-                       href="{{ url_for('schedule', student_id=s.ID) }}">
-                        View Schedule
-                    </a>
-                </td>
+                <td><a class="sched" href="{{ url_for('schedule', student_id=s.ID) }}">View Schedule</a></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     {% else %}
-    <p class="no-results">No students matched your search.</p>
+    <p>No students found.</p>
     {% endif %}
 </body>
 </html>

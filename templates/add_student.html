@@ -4,72 +4,99 @@
     <meta charset="UTF-8">
     <title>Add Student</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 520px; margin: 40px auto; padding: 0 20px; }
-        h1 { color: #003d7a; }
-        nav { margin-bottom: 20px; }
-        nav a { margin-right: 16px; color: #0057a8; text-decoration: none; font-weight: bold; }
-        nav a:hover { text-decoration: underline; }
-        label { display: block; margin-top: 16px; font-weight: bold; }
-        input[type="text"], input[type="number"], select {
-            width: 100%; padding: 8px; box-sizing: border-box;
-            margin-top: 5px; border: 1px solid #aaa; border-radius: 4px;
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
-        .checkbox-row { display: flex; align-items: center; gap: 10px; margin-top: 18px; }
-        .checkbox-row input { width: auto; margin: 0; }
-        .checkbox-row label { margin: 0; font-weight: bold; }
-        #transfer-credits { margin-top: 14px; }
-        button { margin-top: 22px; padding: 10px 26px; background: #0057a8; color: white;
-                 border: none; border-radius: 4px; cursor: pointer; font-size: 15px; }
+        h1 { color: #003d7a; }
+        nav a {
+            color: #0057a8;
+            text-decoration: none;
+        }
+        nav a:hover { text-decoration: underline; }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 7px;
+            margin-top: 4px;
+            box-sizing: border-box;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+        }
+        .transfer-row {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .transfer-row input { width: auto; }
+        #credit-box { margin-top: 12px; }
+        button {
+            margin-top: 20px;
+            padding: 9px 24px;
+            background: #0057a8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
         button:hover { background: #003d7a; }
-        .error { color: #c0392b; background: #fdecea; border: 1px solid #e74c3c;
-                 padding: 10px 14px; border-radius: 4px; margin-top: 14px; }
-        .success-note { color: #27ae60; margin-top: 10px; }
+        .error {
+            color: #c0392b;
+            background: #fdecea;
+            border: 1px solid #e74c3c;
+            padding: 9px 13px;
+            border-radius: 4px;
+            margin-top: 12px;
+        }
     </style>
 </head>
 <body>
     <h1>Add New Student</h1>
-    <nav>
-        <a href="{{ url_for('index') }}">&#8592; Back to Search</a>
-    </nav>
+    <nav><a href="{{ url_for('index') }}">&larr; Back to Search</a></nav>
 
     {% if error %}
-    <p class="error">{{ error }}</p>
+        <p class="error">{{ error }}</p>
     {% endif %}
 
-    <form method="POST" action="{{ url_for('add_student_submit') }}">
-        <label for="id">Student ID</label>
-        <input type="text" id="id" name="id" required placeholder="e.g. 99001">
+    <form method="POST" action="{{ url_for('add_student') }}">
+        <label for="sid">Student ID</label>
+        <input type="text" id="sid" name="id" placeholder="e.g. 10099" required>
 
-        <label for="name">Full Name</label>
-        <input type="text" id="name" name="name" required placeholder="e.g. Jane Doe">
+        <label for="sname">Name</label>
+        <input type="text" id="sname" name="name" placeholder="e.g. John Smith" required>
 
-        <label for="dept_name">Department</label>
-        <select id="dept_name" name="dept_name" required>
-            <option value="">-- Select Department --</option>
-            {% for dept in departments %}
-            <option value="{{ dept.dept_name }}">{{ dept.dept_name }}</option>
+        <label for="dept">Department</label>
+        <select id="dept" name="dept_name" required>
+            <option value="">-- select --</option>
+            {% for d in departments %}
+            <option value="{{ d.dept_name }}">{{ d.dept_name }}</option>
             {% endfor %}
         </select>
 
-        <div class="checkbox-row">
-            <input type="checkbox" id="is_transfer" name="is_transfer"
-                   onchange="toggleCredits(this)">
-            <label for="is_transfer">Transfer Student</label>
+        <div class="transfer-row">
+            <input type="checkbox" id="transfer" name="is_transfer" onchange="toggleCredits(this)">
+            <label for="transfer" style="margin:0;">Transfer student?</label>
         </div>
 
-        <div id="transfer-credits" style="display:none;">
-            <label for="tot_cred">Total Credits Transferred</label>
-            <input type="number" id="tot_cred" name="tot_cred"
-                   min="0" max="999" value="0" placeholder="e.g. 30">
+        <div id="credit-box" style="display:none;">
+            <label for="credits">Transfer Credits</label>
+            <input type="number" id="credits" name="tot_cred" min="0" max="999" value="0">
         </div>
 
         <button type="submit">Add Student</button>
     </form>
 
     <script>
-        function toggleCredits(checkbox) {
-            document.getElementById("transfer-credits").style.display =
-                checkbox.checked ? "block" : "none";
+        function toggleCredits(cb) {
+            document.getElementById("credit-box").style.display = cb.checked ? "block" : "none";
         }
     </script>
 </body>

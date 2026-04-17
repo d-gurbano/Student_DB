@@ -4,49 +4,63 @@
     <meta charset="UTF-8">
     <title>Student Schedule</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 960px; margin: 40px auto; padding: 0 20px; }
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
         h1 { color: #003d7a; }
-        nav { margin-bottom: 20px; }
-        nav a { margin-right: 16px; color: #0057a8; text-decoration: none; font-weight: bold; }
+        nav a {
+            color: #0057a8;
+            text-decoration: none;
+        }
         nav a:hover { text-decoration: underline; }
-        .filter-form { display: flex; align-items: center; gap: 12px; margin: 18px 0; }
-        .filter-form label { font-weight: bold; }
-        .filter-form select { padding: 7px; border: 1px solid #aaa; border-radius: 4px; }
-        .filter-form button { padding: 7px 16px; background: #0057a8; color: white;
-                              border: none; border-radius: 4px; cursor: pointer; }
-        table { border-collapse: collapse; width: 100%; margin-top: 10px; }
-        th { background: #0057a8; color: white; padding: 10px 14px; text-align: left; }
-        td { border: 1px solid #ccc; padding: 10px 14px; }
-        tr:nth-child(even) td { background: #f2f2f2; }
-        .no-results { color: #888; font-style: italic; }
-        .not-found { color: #c0392b; }
+        .year-filter {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .year-filter select {
+            padding: 6px;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th {
+            background: #0057a8;
+            color: white;
+            padding: 10px 12px;
+            text-align: left;
+        }
+        td {
+            border: 1px solid #ccc;
+            padding: 9px 12px;
+        }
+        tr:nth-child(even) td { background: #f4f4f4; }
     </style>
 </head>
 <body>
-    <nav>
-        <a href="{{ url_for('index') }}">&#8592; Back to Search</a>
-    </nav>
+    <nav><a href="{{ url_for('index') }}">&larr; Back to Search</a></nav>
 
     {% if student is none %}
-        <h2 class="not-found">Student not found.</h2>
+        <h2>Student not found.</h2>
     {% else %}
-        <h1>Schedule for {{ student.name }} (ID: {{ student.ID }})</h1>
+        <h1>{{ student.name }}'s Schedule (ID: {{ student.ID }})</h1>
 
-        <form method="GET" class="filter-form"
-              action="{{ url_for('schedule', student_id=student.ID) }}">
-            <label for="year">Filter by Year:</label>
-            <select id="year" name="year" onchange="this.form.submit()">
+        <form method="GET" class="year-filter" action="{{ url_for('schedule', student_id=student.ID) }}">
+            <label for="yr"><b>Filter by year:</b></label>
+            <select id="yr" name="year" onchange="this.form.submit()">
                 <option value="">All Years</option>
                 {% for y in years %}
-                <option value="{{ y }}"
-                    {% if selected_year|string == y|string %}selected{% endif %}>
-                    {{ y }}
-                </option>
+                <option value="{{ y }}" {% if selected_year|string == y|string %}selected{% endif %}>{{ y }}</option>
                 {% endfor %}
             </select>
-            <noscript>
-                <button type="submit">Filter</button>
-            </noscript>
+            <noscript><button type="submit">Go</button></noscript>
         </form>
 
         {% if schedule %}
@@ -73,9 +87,7 @@
             </tbody>
         </table>
         {% else %}
-        <p class="no-results">
-            No courses found{% if selected_year %} for year {{ selected_year }}{% endif %}.
-        </p>
+        <p>No courses found{% if selected_year %} for {{ selected_year }}{% endif %}.</p>
         {% endif %}
     {% endif %}
 </body>
